@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "fluent-plugin-formatter_sprintf"
-  s.version     = "0.0.1"
+  s.version     = "0.0.2"
   s.authors     = ["Hiroshi Toyama"]
   s.email       = ["toyama0919@gmail.com"]
   s.homepage    = "https://github.com/toyama0919/fluent-plugin-formatter_sprintf"
