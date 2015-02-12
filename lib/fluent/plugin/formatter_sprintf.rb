@@ -7,6 +7,8 @@ module Fluent
       include HandleTagAndTimeMixin
 
       config_param :sprintf_format, :string
+      config_param :sprintf_blank_string, :string, :default => nil
+      config_param :sprintf_blank_record_format, :string, :default => nil
 
       def initialize
         super
@@ -18,6 +20,11 @@ module Fluent
         r = /\$\{([^}]+)\}/
         @keys = @sprintf_format.scan(r).map{ |key| key.first }
         @sprintf_format = @sprintf_format.gsub(/\$\{([^}]+)\}/, '%s')
+        if @sprintf_blank_record_format
+          @sprintf_blank_record_keys = @sprintf_blank_record_format.scan(r).map{ |key| key.first }
+          @sprintf_blank_record_format = @sprintf_blank_record_format.gsub(/\$\{([^}]+)\}/, '%s')
+        end
+
         begin
           @sprintf_format % @keys
         rescue ArgumentError => e
@@ -26,16 +33,22 @@ module Fluent
       end
 
       def format(tag, time, record)
-        values = @keys.map{ |key| 
+        if record.empty? && @sprintf_blank_record_format
+          return @sprintf_blank_record_format % get_values(@sprintf_blank_record_keys, tag, time, record)
+        end
+        @sprintf_format % get_values(@keys, tag, time, record)
+      end
+
+      def get_values(keys, tag, time, record)
+        keys.map{ |key|
           if key == 'tag'
             tag
           elsif key == 'time'
             Time.at(time).strftime(@time_format)
           else
-            record[key] 
+            record[key] || @sprintf_blank_string
           end
         }
-        @sprintf_format % values
       end
     end
   end
