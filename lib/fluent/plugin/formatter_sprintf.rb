@@ -46,7 +46,7 @@ module Fluent
           elsif key == 'time'
             Time.at(time).strftime(@time_format)
           else
-            record[key] || @sprintf_blank_string
+            (record[key].nil? || record[key].empty?) ? @sprintf_blank_string : record[key]
           end
         }
       end
