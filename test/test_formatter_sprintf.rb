@@ -47,4 +47,56 @@ class SprintfFormatterTest < ::Test::Unit::TestCase
       configure({'sprintf_format' => "${url}\t%s\t${ip_address}\t"})
     end    
   end
+
+  def test_fixnum
+    configure({'sprintf_format' => "${tag}\t${id}\t${ip_address}\n"})
+    tag = 'file.test'
+    record = {"id" => 1, "ip_address" => "127.0.0.1"}
+
+    formatted = @formatter.format(tag, @time, record)
+    assert_equal("file.test\t1\t127.0.0.1\n", formatted)
+  end
+
+  def test_sprintf_blank_string
+    configure(
+      {
+        'sprintf_format' => "${tag}\t${id}\t${ip_address}\t${space}\n",
+        'sprintf_blank_string' => "-",
+      }
+    )
+    tag = 'file.test'
+    record = {"id" => nil, "ip_address" => "", "space" => " "}
+
+    formatted = @formatter.format(tag, @time, record)
+    assert_equal("file.test\t-\t-\t-\n", formatted)
+  end
+
+  def test_sprintf_blank_string_with_array
+    configure(
+      {
+        'sprintf_format' => "${tag}\t${array}\n",
+        'sprintf_blank_string' => "-",
+      }
+    )
+    tag = 'file.test'
+    record = {"array" => []}
+
+    formatted = @formatter.format(tag, @time, record)
+    assert_equal("file.test\t-\n", formatted)
+  end
+
+  def test_sprintf_blank_record_format
+    configure(
+      {
+        'sprintf_format' => "${tag}\t${id}\t${ip_address}\t${space}\n",
+        'sprintf_blank_string' => "-",
+        'sprintf_blank_record_format' => "---\n",
+      }
+    )
+    tag = 'file.test'
+    record = {}
+
+    formatted = @formatter.format(tag, @time, record)
+    assert_equal("---\n", formatted)
+  end
 end

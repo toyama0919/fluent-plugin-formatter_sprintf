@@ -41,14 +41,25 @@ module Fluent
 
       def get_values(keys, tag, time, record)
         keys.map{ |key|
-          if key == 'tag'
-            tag
-          elsif key == 'time'
-            Time.at(time).strftime(@time_format)
-          else
-            (record[key].nil? || record[key].empty?) ? @sprintf_blank_string : record[key]
-          end
+          get_value(key, tag, time, record)
         }
+      end
+
+      def get_value(key, tag, time, record)
+        if key == 'tag'
+          tag
+        elsif key == 'time'
+          Time.at(time).strftime(@time_format)
+        else
+          return @sprintf_blank_string if record[key].nil?
+          if record[key].respond_to?(:empty?) && record[key].empty?
+            return @sprintf_blank_string
+          end
+          if record[key].class == String && record[key].strip.empty?
+            return @sprintf_blank_string
+          end
+          record[key]
+        end
       end
     end
   end
