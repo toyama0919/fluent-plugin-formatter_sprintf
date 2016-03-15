@@ -53,6 +53,24 @@ gem install fluent-plugin-formatter_sprintf
 </match>
 ```
 
+### blank string(include [nil, empty?, blank?])
+
+```apache
+  format sprintf
+  sprintf_format "${tag} ${time} ${url} ${ip_address}\n"
+  sprintf_blank_string -
+```
+
+##### input
+```json
+2016-03-15 14:21:40 +0900 analysis.pageview: { "url": null, "ip_address": null }
+```
+
+##### output
+```
+analysis.pageview 2016-01-01 00:00:00 - -
+```
+
 ### bad syntax(at error)
 
   sprintf_format "%s ${tag} ${time} ${url} ${ip_address}\n"
