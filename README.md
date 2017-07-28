@@ -1,6 +1,7 @@
 # fluent-plugin-formatter_sprintf
 
 [![Build Status](https://secure.travis-ci.org/toyama0919/fluent-plugin-formatter_sprintf.png?branch=master)](http://travis-ci.org/toyama0919/fluent-plugin-formatter_sprintf)
+[![Gem Version](https://badge.fury.io/rb/fluent-plugin-formatter_sprintf.svg)](http://badge.fury.io/rb/fluent-plugin-formatter_sprintf)
 
 Fluentd sprintf formatter plugin
 
