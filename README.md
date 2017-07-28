@@ -22,8 +22,10 @@ gem install fluent-plugin-formatter_sprintf
 <match test.file>
   type file
   path /tmp/test.log
-  format sprintf
-  sprintf_format "${tag} ${time} ${url} ${ip_address}\n"
+  <format>
+    @type sprintf
+    sprintf_format "${tag} ${time} ${url} ${ip_address}\n"
+  </format>
   time_format "%Y-%m-%d %H:%M:%S"
 </match>
 ```
@@ -47,18 +49,21 @@ gem install fluent-plugin-formatter_sprintf
   time_format %Y-%m-%d %H:%M:%S,%3N
   store_as text
 
-  format sprintf
-  sprintf_format "${tag} ${time} ${url} ${ip_address}\n"
-
+  <format>
+    @type sprintf
+    sprintf_format "${tag} ${time} ${url} ${ip_address}\n"
+  </format>
 </match>
 ```
 
 ### blank string(include [nil, empty?, blank?])
 
 ```apache
-  format sprintf
-  sprintf_format "${tag} ${time} ${url} ${ip_address}\n"
-  sprintf_blank_string -
+  <format>
+    @type sprintf
+    sprintf_format "${tag} ${time} ${url} ${ip_address}\n"
+    sprintf_blank_string -
+  </format>
 ```
 
 ##### input
@@ -73,8 +78,12 @@ analysis.pageview 2016-01-01 00:00:00 - -
 
 ### bad syntax(at error)
 
+```apache
+<format>
+  @type sprintf
   sprintf_format "%s ${tag} ${time} ${url} ${ip_address}\n"
-
+</format>
+```
 
 ## ChangeLog
 

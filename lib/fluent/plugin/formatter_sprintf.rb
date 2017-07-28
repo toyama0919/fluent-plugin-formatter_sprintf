@@ -1,10 +1,9 @@
-module Fluent
-  module TextFormatter
-    class SprintfFormatter < Formatter
-      Plugin.register_formatter('sprintf', self)
+require 'fluent/plugin/formatter'
 
-      include Configurable
-      include HandleTagAndTimeMixin
+module Fluent
+  module Plugin
+    class SprintfFormatter < Formatter
+      Fluent::Plugin.register_formatter('sprintf', self)
 
       config_param :sprintf_format, :string
       config_param :sprintf_blank_string, :string, :default => nil

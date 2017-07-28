@@ -1,4 +1,5 @@
 require_relative 'helper'
+require 'fluent/test/driver/formatter'
 require 'fluent/formatter'
 require 'fluent/plugin/formatter_sprintf'
 
@@ -9,7 +10,7 @@ class SprintfFormatterTest < ::Test::Unit::TestCase
   end
 
   def create_driver(conf={})
-    Fluent::Test::FormatterTestDriver.new(Fluent::TextFormatter::SprintfFormatter).configure(conf)
+    Fluent::Test::Driver::Formatter.new(Fluent::Plugin::SprintfFormatter).configure(conf)
   end
 
   def configure(conf)
@@ -21,7 +22,7 @@ class SprintfFormatterTest < ::Test::Unit::TestCase
     tag = 'file.test'
     record = {"url" => "/", "ip_address" => "127.0.0.1"}
 
-    formatted = @formatter.format(tag, @time, record)
+    formatted = @formatter.instance.format(tag, @time, record)
     assert_equal("file.test / 127.0.0.1\n", formatted)
   end
 
@@ -30,7 +31,7 @@ class SprintfFormatterTest < ::Test::Unit::TestCase
     tag = 'file.test'
     record = {"url" => "/", "ip_address" => "127.0.0.1"}
 
-    formatted = @formatter.format(tag, @time, record)
+    formatted = @formatter.instance.format(tag, @time, record)
     assert_equal("file.test\t/\t127.0.0.1\n", formatted)
   end
 
@@ -53,7 +54,7 @@ class SprintfFormatterTest < ::Test::Unit::TestCase
     tag = 'file.test'
     record = {"id" => 1, "ip_address" => "127.0.0.1"}
 
-    formatted = @formatter.format(tag, @time, record)
+    formatted = @formatter.instance.format(tag, @time, record)
     assert_equal("file.test\t1\t127.0.0.1\n", formatted)
   end
 
@@ -67,7 +68,7 @@ class SprintfFormatterTest < ::Test::Unit::TestCase
     tag = 'file.test'
     record = {"id" => nil, "ip_address" => "", "space" => " "}
 
-    formatted = @formatter.format(tag, @time, record)
+    formatted = @formatter.instance.format(tag, @time, record)
     assert_equal("file.test\t-\t-\t-\n", formatted)
   end
 
@@ -81,7 +82,7 @@ class SprintfFormatterTest < ::Test::Unit::TestCase
     tag = 'file.test'
     record = {"array" => []}
 
-    formatted = @formatter.format(tag, @time, record)
+    formatted = @formatter.instance.format(tag, @time, record)
     assert_equal("file.test\t-\n", formatted)
   end
 
@@ -96,7 +97,7 @@ class SprintfFormatterTest < ::Test::Unit::TestCase
     tag = 'file.test'
     record = {}
 
-    formatted = @formatter.format(tag, @time, record)
+    formatted = @formatter.instance.format(tag, @time, record)
     assert_equal("---\n", formatted)
   end
 end
