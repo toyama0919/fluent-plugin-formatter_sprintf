@@ -5,12 +5,18 @@
 
 Fluentd sprintf formatter plugin
 
-## Install
+## Install(Fluentd v0.14)
 
 Use RubyGems:
 
 ```
 gem install fluent-plugin-formatter_sprintf
+```
+
+## Install(Fluentd v0.12)
+
+```
+gem install fluent-plugin-formatter_sprintf -v 0.0.4
 ```
 
 ## Configuration Example
